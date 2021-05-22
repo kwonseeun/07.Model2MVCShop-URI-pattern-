@@ -9,6 +9,7 @@
 
 </head>
 <body>
+	당신이 열어본 상품을 알고 있다
 <br>
 <br>
 <%
@@ -19,7 +20,6 @@
 	if (cookies!=null && cookies.length > 0) {
 		for (int i = 0; i < cookies.length; i++) {
 			Cookie cookie = cookies[i];
-			System.out.println(cookie.getName());
 			if (cookie.getName().equals("history")) {
 				history = cookie.getValue();
 			}
