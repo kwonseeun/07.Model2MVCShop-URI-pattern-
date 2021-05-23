@@ -2,17 +2,6 @@
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page import="com.model2.mvc.common.Search"%>
-<%@ page import="com.model2.mvc.common.Page"%>
-<%@ page import="com.model2.mvc.service.domain.Purchase"%>
-<%@ page import="java.util.List"%>
-
-<%
-List<Purchase> list = (List<Purchase>) request.getAttribute("list");
-Search search = (Search) request.getAttribute("search");
-Page resultPage = (Page) request.getAttribute("resultPage");
-%>
-
 <html>
 <head>
 <title>판매내역</title>
@@ -20,7 +9,7 @@ Page resultPage = (Page) request.getAttribute("resultPage");
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-	function fncGetSaleList(currentPage) {
+	function fncGetList(currentPage) {
 		document.getElementById("currentPage").value = currentPage;
 		document.detailForm.submit();
 	}
@@ -48,8 +37,8 @@ Page resultPage = (Page) request.getAttribute("resultPage");
 	</tr>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"	>
+	<tr height="30">
 		<td colspan="11">전체 ${ resultPage.totalCount } 건수, 현재 ${ resultPage.currentPage } 페이지</td>
 	</tr>
 	<tr>
@@ -68,54 +57,42 @@ Page resultPage = (Page) request.getAttribute("resultPage");
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
-
-	<%
-	for(int i=0; i<list.size(); i++) {
-		Purchase purchase = (Purchase)list.get(i);
-	%>
+	
+	<c:set var="i" value="0"/>
+	<c:forEach var="purchase" items="${list}">
+	<c:set var ="i" value="${i+1}"/>
 	<tr class="ct_list_pop">
 		<td align="center">
-			<a href="/purchase/getPurchase?tranNo=<%= purchase.getTranNo() %>"><%= i+1 %></a>
+			<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${i}</a>
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/user/getUser?userId=<%= purchase.getBuyer().getUserId() %>"><%= purchase.getBuyer().getUserId() %></a>
+			<a href="/user/getUser?userId=${purchase.buyer.userId}">${purchase.buyer.userId}</a>
 		</td>
 		<td></td>
-		<td align="left"><%= purchase.getReceiverName() %></td>
+		<td align="left">${purchase.receiverName}</td>
 		<td></td>
-		<td align="left"><%= purchase.getReceiverPhone() %></td>
+		<td align="left">${purchase.receiverPhone}</td>
 		<td></td>
 		<td align="left">
-			<a href="/product/getProduct?prodNo=<%= purchase.getPurchaseProd().getProdNo() %>&menu=manage"><%= purchase.getPurchaseProd().getProdName() %>(<%= purchase.getPurchaseProd().getProdNo() %>)</a>
+			<a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo}&menu=manage">${purchase.purchaseProd.prodName}(${purchase.purchaseProd.prodNo})</a>
 		</td>
 		<td></td>
 		<td align="left" width="100px">
-			<%= purchase.getOrderDate() %>
+			${purchase.orderDate}
 		</td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
-	<% } %>
-	
+	</c:forEach>
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<input type="hidden" id="currentPage" name="currentPage" value=""/>
 		<td align="center">
-			<% if(resultPage.getCurrentPage() > resultPage.getPageUnit()){ %>
-				<a href="javascript:fncGetSaleList('<%=resultPage.getBeginUnitPage()-1%>')">이전</a>	
-			<% } %>
-			<% for(int i = resultPage.getBeginUnitPage(); i<=resultPage.getEndUnitPage(); i++){ %>
-				<a href="javascript:fncGetSaleList('<%= i %>')"><%= i %></a>					
-			<% } %>
-			<% if(resultPage.getCurrentPage() <= resultPage.getPageUnit()){ %>
-				<% if(!(resultPage.getMaxPage() <= resultPage.getPageUnit())){%>
-					<a href="javascript:fncGetSaleList('<%=resultPage.getEndUnitPage()+1%>')">다음</a>
-				<% } %>		
-			<% } %>
+			<jsp:include page="../common/pageNavigator.jsp"/>
 		</td>
 	</tr>
 </table>

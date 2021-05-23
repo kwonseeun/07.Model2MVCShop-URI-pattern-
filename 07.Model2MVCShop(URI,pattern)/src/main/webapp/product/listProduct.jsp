@@ -22,7 +22,7 @@ function fncGetList(currentPage){
 }
 
 function fncSetOrder(order){
-	document.getElementById("order").value = order;
+	document.getElementById("order").value = order.value;
 	fncGetList('1');
 }
 </script>
@@ -60,23 +60,34 @@ function fncSetOrder(order){
 </table>
 
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td colspan="11" >전체 ${ resultPage.totalCount } 건수, 현재 ${resultPage.currentPage} 페이지</td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+	<tr height="30">
+		<td colspan="8" >전체 ${ resultPage.totalCount } 건수, 현재 ${resultPage.currentPage} 페이지</td>
+		<td align="right">
+			<select onchange="javascript:fncSetOrder(this)">
+				<option value="reg_date" ${search.order == 'reg_date' ? "selected" : ""}>
+						최신순
+				</option>
+				<option value="price" ${search.order == 'price' ? "selected" : ""}>
+						가격순
+				</option>
+			</select>
+				판매중만 표시<input onclick="javascript:fncGetList('1')" type="checkbox" name="display" value="on" ${search.display == 'on' ? "checked" : ""}></input>
+		</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="80">No</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">상품명</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">가격 <a href="javascript:fncSetOrder('price')">정렬</a></td>
+		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" >등록일 <a href="javascript:fncSetOrder('reg_date')">정렬</a></td>	
+		<td class="ct_list_b" >등록일</td>	
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="200">현재상태 <a href="javascript:fncSetOrder('tranCode')">정렬</a></td>	
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
+		<td colspan="9" bgcolor="808285" height="1"></td>
 	</tr>
 	<c:set var="i" value="0"/>
 		<c:forEach var="product" items="${ list }">
@@ -106,7 +117,7 @@ function fncSetOrder(order){
 		 		</c:when>
 		 		<c:otherwise>
 		 			<c:if test="${product.proTranCode == null}">
-		 				판매중ad
+		 				판매중
 		 			</c:if>
 		 			<c:if test="${product.proTranCode == '1  ' || product.proTranCode == '1'}">
 		 				구매완료
@@ -125,7 +136,7 @@ function fncSetOrder(order){
 		</td>	
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<td colspan="9" bgcolor="D6D7D6" height="1"></td>
 	</tr>
 	
 	</c:forEach>

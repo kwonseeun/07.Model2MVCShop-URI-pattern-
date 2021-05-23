@@ -72,6 +72,9 @@
 								<when test=" searchCondition == 2 and searchKeyword != '' ">
 									AND p.price like '%${searchKeyword}%'
 								</when>
+								<when test=" display == 'on'">
+									AND t.tran_status_code IS NULL
+								</when>
 								</choose>
 							</if>
 						</where>
@@ -81,9 +84,6 @@
 							</when>
 							<when test=" order == 'price' ">
 								p.price DESC
-							</when>
-							<when test=" order == 'tranCode' ">
-								t.tran_status_code ASC NULLS FIRST
 							</when>
 						</choose>) inner_table
 			WHERE ROWNUM &lt;= #{endRowNum} )
@@ -139,6 +139,9 @@
 						</when>
 						<when test=" searchCondition == 2 and searchKeyword !=''">
 							AND p.price like '%${searchKeyword}%'
+						</when>
+						<when test=" display == 'on'">
+							AND t.tran_status_code IS NULL
 						</when>
 						</choose>
 					</if>

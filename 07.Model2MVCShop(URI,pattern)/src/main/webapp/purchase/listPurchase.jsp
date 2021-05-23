@@ -41,9 +41,8 @@ function fncGetList(currentPage){
 				</tr>
 			</table>
 
-			<table width="100%" border="0" cellspacing="0" cellpadding="0"
-				style="margin-top: 10px;">
-				<tr>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr height="30">
 					<td colspan="11">전체 ${ resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지
 					</td>
 				</tr>

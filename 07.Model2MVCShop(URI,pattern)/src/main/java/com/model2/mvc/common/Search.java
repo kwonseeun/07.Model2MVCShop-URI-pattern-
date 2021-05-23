@@ -12,6 +12,9 @@ public class Search {
 	
 	//List 정렬
 	private String order;
+	//List Display 판매중 / 재고없음
+	private String display;
+	
 	//==> 리스트화면 currentPage에 해당하는 회원정보를 ROWNUM 사용 SELECT 위해 추가된 Field 
 	//==> UserMapper.xml 의 
 	//==> <select  id="getUserList"  parameterType="search"	resultMap="userSelectMap">
@@ -69,6 +72,14 @@ public class Search {
 		this.order = order;
 	}
 	
+	public String getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(String display) {
+		this.display = display;
+	}
+
 	@Override
 	public String toString() {
 		return "Search [currentPage=" + currentPage + ", searchCondition="
