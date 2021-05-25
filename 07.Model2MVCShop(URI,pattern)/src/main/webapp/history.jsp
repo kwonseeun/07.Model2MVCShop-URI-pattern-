@@ -11,6 +11,7 @@
 <body>
 <br>
 <br>
+최근 본 상품
 <%
 	request.setCharacterEncoding("euc-kr");
 	response.setCharacterEncoding("euc-kr");

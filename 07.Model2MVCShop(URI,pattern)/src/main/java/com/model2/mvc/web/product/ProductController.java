@@ -12,17 +12,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.CookieGenerator;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
-//==> 회원관리 Controller
 @Controller
 @RequestMapping("/product/*")
 public class ProductController {
@@ -37,9 +38,6 @@ public class ProductController {
 		System.out.println(this.getClass());
 	}
 
-	// ==> classpath:config/common.properties , classpath:config/commonservice.xml
-	// 참조 할것
-	// ==> 아래의 두개를 주석을 풀어 의미를 확인 할것
 	@Value("#{commonProperties['pageUnit']}")
 	// @Value("#{commonProperties['pageUnit'] ?: 3}")
 	int pageUnit;
@@ -69,27 +67,34 @@ public class ProductController {
 	@RequestMapping("getProduct")
 	public String getProduct(@RequestParam("prodNo") int prodNo,
 			@RequestParam(value = "menu", defaultValue = "search") String menu, Model model,
-			HttpServletResponse response, HttpServletRequest request) throws Exception {
+			@CookieValue(value="history", required=false) String history, HttpServletResponse response) throws Exception {
 
 		System.out.println("/getProduct.do");
 		// Business Logic
 		Product product = productService.getProduct(prodNo);
+		
+// 		Cookie History (Spring frameWork 사용)
+		CookieGenerator cookie = new CookieGenerator();
+		
+		history = history + "," + product.getProdNo() + "/" + product.getProdName();
+		
+		cookie.setCookieName("history");
+		cookie.addCookie(response, history);
 
-		// Cookie History
-
-		String history = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null && cookies.length > 0) {
-			for (int i = 0; i < cookies.length; i++) {
-				Cookie cookie = cookies[i];
-				if (cookie.getName().equals("history")) {
-					history = cookies[i].getValue();
-				}
-			}
-		}
-
-		Cookie cookie = new Cookie("history", history + "," + product.getProdNo() + "/" + product.getProdName());
-		response.addCookie(cookie);
+// 		java cookie (안됨)
+//		String history = null;
+//		Cookie[] cookies = request.getCookies();
+//		if (cookies != null && cookies.length > 0) {
+//			for (int i = 0; i < cookies.length; i++) {
+//				Cookie cookie = cookies[i];
+//				if (cookie.getName().equals("history")) {
+//					history = cookies[i].getValue();
+//				}
+//			}
+//		}
+//
+//		Cookie cookie = new Cookie("history", history + "," + product.getProdNo() + "/" + product.getProdName());
+//		response.addCookie(cookie);
 
 		// Model 과 View 연결
 		model.addAttribute("product", product);

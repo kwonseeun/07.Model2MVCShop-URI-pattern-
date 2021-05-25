@@ -3,6 +3,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.model2.mvc.service.domain.Product" %>
 
+<%
+Product product = (Product)request.getAttribute("product");
+
+String history = null;
+Cookie[] cookies = request.getCookies();
+if (cookies != null && cookies.length > 0) {
+	for (int i = 0; i < cookies.length; i++) {
+		Cookie cookie = cookies[i];
+		if (cookie.getName().equals("history")) {
+			history = cookies[i].getValue();
+		}
+	}
+}
+
+Cookie cookie = new Cookie("history", history + "," + product.getProdNo() + "/" + product.getProdName());
+response.addCookie(cookie);
+%>
+
 <html>
 <head>
 <title>상품상세조회</title>

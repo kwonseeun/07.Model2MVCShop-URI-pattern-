@@ -72,7 +72,8 @@ function fncSetOrder(order){
 						가격순
 				</option>
 			</select>
-				판매중만 표시<input onclick="javascript:fncGetList('1')" type="checkbox" name="display" value="on" ${search.display == 'on' ? "checked" : ""}></input>
+				판매중만 표시<input onclick="javascript:fncGetList('1')" type="checkbox" name="display"
+							value="on" ${search.display == 'on' ? "checked" : ""}></input>
 		</td>
 	</tr>
 	<tr>
@@ -84,7 +85,7 @@ function fncSetOrder(order){
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" >등록일</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="200">현재상태 <a href="javascript:fncSetOrder('tranCode')">정렬</a></td>	
+		<td class="ct_list_b" width="200">현재상태</td>	
 	</tr>
 	<tr>
 		<td colspan="9" bgcolor="808285" height="1"></td>
